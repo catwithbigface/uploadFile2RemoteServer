@@ -91,7 +91,7 @@ with open(local_file, "rb") as f:
     # sftp.mkdir(remote_file_path)
     ensure_remote_directory_exists(sftp, remote_file_path)
     # sftp.put(local_file, os.path.join(remote_file_path, replace_filename(os.path.basename(local_file))))
-    sftp.put(local_file, os.path.join(remote_file_path, replace_filename(os.path.basename(local_file))))
+    sftp.put(local_file, os.path.join(remote_file_path, os.path.basename(local_file)))
 print("transfer successfully finished")
 sftp.close()
 client.close()
