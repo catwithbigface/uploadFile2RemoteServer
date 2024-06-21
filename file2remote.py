@@ -78,7 +78,12 @@ print("about to transfer file:" + local_file)
 print("create client info:host-{},ip-{},username-{},psd-{}".format(host_ip, host_port, username, password))
 client = paramiko.SSHClient()
 client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-client.connect(host_ip, int(host_port), username=username, password=password)
+try:
+    client.connect(host_ip, int(host_port), username=username, password=password)
+except Exception:
+    win32api.MessageBox(0, "服务器连接失败,请检查相关环境变量信息", "warning", win32con.MB_OK)
+    sys.exit(1)
+
 print("client created")
 # start transfer
 print("start transfer")
@@ -91,7 +96,7 @@ with open(local_file, "rb") as f:
     # sftp.mkdir(remote_file_path)
     ensure_remote_directory_exists(sftp, remote_file_path)
     # sftp.put(local_file, os.path.join(remote_file_path, replace_filename(os.path.basename(local_file))))
-    sftp.put(local_file, os.path.join(remote_file_path, replace_filename(os.path.basename(local_file))))
+    sftp.put(local_file, os.path.join(remote_file_path, os.path.basename(local_file)))
 print("transfer successfully finished")
 sftp.close()
 client.close()
